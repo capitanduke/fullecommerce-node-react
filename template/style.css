@@ -1,0 +1,154 @@
+html{
+    font-size:62.5%; /* 16px * 62.5% = 1rem */
+    box-sizing: border-box;
+}
+
+body{
+    font: 1.6rem Helvetica;
+    height: 100vh;
+    margin: 0;
+}
+
+a:hover{
+    color:#ff0000 !important;
+}
+
+
+.grid-container{
+    display: grid;
+    grid-template-areas: 
+        "header" 
+        "main" 
+        "footer";
+    grid-template-columns: 1fr;
+    grid-template-rows: 5rem 1fr 5rem;
+    height: 100%;
+}
+
+.header{
+    grid-area: header;
+    background-color: black;
+    color: blanchedalmond;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1.5rem;
+}
+
+.brand a{
+    color: blanchedalmond;
+    font-weight: bold;
+    font-size: 2.5rem;
+    text-decoration: none;
+}
+
+.header-links a{
+    color: blanchedalmond;
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-decoration: none;
+}
+
+.header-links a:hover{
+    color: red;
+}
+
+
+.main{
+    grid-area: main;
+}
+
+.products{
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.products li{
+    flex: 0 1 34rem;
+    margin: 1rem;
+    height: 50rem;
+    border-bottom: .1rem #c0c0c0 solid;
+    padding: 2rem;
+}
+
+.product{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.product-image{
+    max-width: 34rem;
+    max-height: 34rem;
+}
+
+.product-name{
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.product-name a{
+    text-decoration: none;
+    color: black;
+}
+
+.product-brand{
+    font-size: 1rem;
+}
+
+.product-price{
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.product-rating{
+    margin-bottom: 1rem;
+}
+
+.footer{
+    grid-area: footer;
+    background-color: black;
+    color: blanchedalmond;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* side bar */
+.brand button{
+    font-size: 3rem;
+    padding: .5rem;
+    border: none;
+    background: none;
+    color:white;
+    cursor: pointer;
+}
+
+
+.sidebar{
+    position: fixed;
+    transform: translateY(-30rem);
+    width: 30rem;
+    background-color: grey;
+}
+
+.open{
+    transform: translateY(0) !important;
+    height: 100%;
+}
+
+.close-button{
+    position: absolute;
+    right:.5rem;
+    top:1rem;
+    border-radius: 50%;
+    border: 1rem #000 solid;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
