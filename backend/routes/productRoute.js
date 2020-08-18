@@ -1,9 +1,35 @@
 import express from 'express';
 import Product from '../models/productModel';
+import { isAuth, isAdmin } from '../util';
 
 const router = express.Router();
 
-  router.post('/upload', async (req, res) => {
+  router.get('/', async(req, res) => {
+    const products = await Product.find({});
+    res.send(products);
+  });
+
+  router.get('/:id', async(req, res) => {
+    const productId = req.params.id;
+    const product = await Product.findOne({_id: productId});
+    if(product){
+      res.send(product);
+    } else {
+      res.status(404).send({message: "The product doesn't exist or something went wrong"});
+    }
+  });
+
+  router.get('/details/:id', async(req, res) => {
+    const productId = req.params.id;
+    const product = await Product.findOne({_id: productId});
+    if(product){
+      res.send(product);
+    } else {
+      res.status(404).send({message: "The product doesn't exist or something went wrong"});
+    }
+  });
+
+  router.post('/upload', isAuth, isAdmin, async (req, res) => {
 
     const product = new Product({
       
@@ -12,7 +38,7 @@ const router = express.Router();
       brand: req.body.brand,
       price: req.body.price,
       category: req.body.category,
-      count: req.body.count,
+      countInStock: req.body.countInStock,
       description: req.body.description,
       rating: req.body.rating,
       reviews: req.body.reviews,
@@ -22,30 +48,50 @@ const router = express.Router();
     const newProduct = await product.save();
 
     if (newProduct) {
-      res.send({
-        _id: newProduct.id,
-        name: newProduct.name,
-        image: newProduct.image,
-        brand: newProduct.brand,
-        price: newProduct.price,
-        category: newProduct.category,
-        count: newProduct.count,
-        description: newProduct.description,
-        rating: newProduct.rating,
-        reviews: newProduct.reviews,
-      });
+      return res.status(201).send({ message: 'New product created', data: newProduct });
+      
     } else {
-      res.status(401).send({ message: 'Invalid Product Data.' });
+      return res.status(501).send({ message: 'Error in creating product' });
     }
 
   });
 
-  router.get('/product-list', async (req, res) => {
-    const products = await Product.find();
-    res.send(products);
-  });
-  
+  router.put('/upload/:id', isAuth, isAdmin, async (req, res) => {
+    const productId = req.params.id;
+    const product = await Product.findOne({_id: productId});
+    if(product){
+      product.name = req.body.name;
+      product.image = req.body.image;
+      product.brand = req.body.brand;
+      product.price = req.body.price;
+      product.category = req.body.category;
+      product.countInStock = req.body.countInStock;
+      product.description = req.body.description;
+      product.rating = req.body.rating;
+      product.reviews = req.body.reviews;
+      const updatedProduct = await product.save();
+      if (updatedProduct) {
+        return res.status(201).send({ message: 'Product updated', data: updatedProduct });
+      }
+    }
 
+    return res.status(501).send({ message: 'Error in updating product' });
+
+  });
+
+ 
+  router.delete('/delete/:id', isAuth, isAdmin, async (req, res) => {
+
+    const deletedProduct = await Product.findById(req.params.id);
+    if (deletedProduct) {
+      await deletedProduct.remove();
+      res.send({ message: 'Product Deleted' });
+    } else {
+      res.send('Error in Deletion.');
+    }
+
+  })
+ 
 
 
 export default router;
