@@ -16,11 +16,6 @@ function CheckoutSteps() {
     const { payment } = paymentState;
 
 
-    console.log(shipping);
-    console.log(payment);
-
-
-
     return <div className="checkout-steps-container">
             { 
                 userInfo ? 
