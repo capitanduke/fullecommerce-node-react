@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, update } from '../actions/userAction';
+import { listMyOrders } from '../actions/orderAction';
 
 function ProfileScreen(props){
 
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [name, setName] = useState( '' );
+    const [email, setEmail] = useState( '' );
+    const [password, setPassword] = useState( '' );
     const dispatch = useDispatch();
 
     const userSignin = useSelector(state => state.userSignin);
     const {userInfo} = userSignin;
 
-    const stateAll = useSelector(state => state);
-    console.log(stateAll);
+    const userUpdate = useSelector(state => state.userUpdate);
+    const { loading, error, success} = userUpdate;
+
 
     const handleLogout = () => {
         dispatch(logout());
@@ -25,8 +28,9 @@ function ProfileScreen(props){
         dispatch(update({ userId: userInfo._id, name, email, password}))
     }
 
-    const userUpdate = useSelector(state => state.userUpdate);
-    const { loading, error, success} = userUpdate;
+    const myOrderList = useSelector(state => state.myOrderList);
+    const { loading: loadingOrders, orders, error: errorOrders } = myOrderList;
+
 
     useEffect(() => {
         if(userInfo){
@@ -34,10 +38,13 @@ function ProfileScreen(props){
             setName(userInfo.name);
             setPassword(userInfo.password);
         }
+        dispatch(listMyOrders(userInfo._id))
         return () => {
           //
         };
       }, []);
+
+    
 
 
     return <div className="profile">
@@ -56,19 +63,19 @@ function ProfileScreen(props){
                             <label htmlFor="name">
                                 Name
                             </label>
-                            <input type="name" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)}>
+                            <input type="name" name="name" id="name" value={ name || ''} onChange={(e) => setName(e.target.value)}>
                             </input>
                         </li>
                         <li>
                             <label htmlFor="email">
                                 Email
                             </label>
-                            <input type="email" name="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)}>
+                            <input type="email" name="email" id="email" value={ email || ''} onChange={(e) => setEmail(e.target.value)}>
                             </input>
                         </li>
                         <li>
                             <label htmlFor="password">Password</label>
-                            <input type="password" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)}>
+                            <input type="password" id="password" name="password" value={ password || ''} onChange={(e) => setPassword(e.target.value)}>
                             </input>
                         </li>
                         <li>
@@ -81,7 +88,34 @@ function ProfileScreen(props){
                 </form>
             </div>
         </div>
-        <div className="profile-orders"></div>
+        <div className="profile-orders content-margined">
+            {
+                loadingOrders ? <div>Loading...</div> :
+                errorOrders ? <div>{errorOrders} </div> :
+                    <table className="table">
+                    <thead>
+                        <tr>
+                        <th>ID</th>
+                        <th>DATE</th>
+                        <th>TOTAL</th>
+                        <th>PAID</th>
+                        <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {orders.map(order => <tr key={order._id}>
+                        <td>{order._id}</td>
+                        <td>{order.createdAt}</td>
+                        <td>{order.totalPrice}</td>
+                        <td>{order.isPaid}</td>
+                        <td>
+                            <Link to={"/order/" + order._id}>DETAILS</Link>
+                        </td>
+                        </tr>)}
+                    </tbody>
+                    </table>
+            }
+        </div>
     </div>
 }
 
