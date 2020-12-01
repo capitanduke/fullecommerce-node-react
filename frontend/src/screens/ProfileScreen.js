@@ -28,14 +28,27 @@ function ProfileScreen(props){
         dispatch(update({ userId: userInfo._id, name, email, password}))
     }
 
+    if(success){
+        let element = document.getElementById('update-profile-success');
+        element.classList.add('up-active');
+        
+
+        setTimeout(() => {
+            element.classList.remove('up-active');
+        }, 5000);
+
+    }
+
 
 
     useEffect(() => {
+       
         if(userInfo){
             setEmail(userInfo.email);
             setName(userInfo.name);
             setPassword(userInfo.password);
         }
+        
         return () => {
           //
         };
@@ -55,6 +68,7 @@ function ProfileScreen(props){
                         <li>
                             {loading && <div>Loading...</div>}
                             {error && <div>{error}</div>}
+                            <div className="update-profile-success" id="update-profile-success">Profile Updated</div>
                         </li>
                         <li>
                             <label htmlFor="name">
