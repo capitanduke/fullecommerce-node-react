@@ -129,6 +129,7 @@ a:hover{
   display: flex;
   justify-content: center;
   align-items: center;
+  
 }
 
 
@@ -483,6 +484,48 @@ tbody>tr:nth-child(odd){
 .profile-orders{
   flex: 3 1 60rem;
 }
+
+.menu-top-profile-home{
+  display: flex;
+  flex-direction: row;
+}
+
+.menu-top-cart{
+  display: flex;
+  margin: 1em;
+}
+
+
+
+.profile-drop-menu{
+  display: none;
+  list-style-type: none;
+}
+
+.menu-top-profile{
+  /*display: flex;*/
+  margin: 1em;
+  background-color: #000;
+  height:2em;
+  /*flex-direction: column;*/
+}
+
+
+.test{
+  display:none;
+}
+
+.test2{
+  background-color: #000;
+  padding: 1em;
+  position: fixed;
+}
+
+.test2 > div{
+  padding: 2rem;
+}
+
+
 
 
 
