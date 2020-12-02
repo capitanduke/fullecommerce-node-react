@@ -16,6 +16,7 @@ import OrderScreen from './screens/OrderScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import OrdersScreen from './screens/OrdersScreen';
 import HistoryOrdersScreen from './screens/HistoryOrdersScreen';
+import history from './history';
 
 
 function App(props) {
@@ -23,14 +24,15 @@ function App(props) {
   const userSignin = useSelector(state => state.userSignin);
   const {userInfo} = userSignin;
 
+
   const dispatch = useDispatch();
 
   const handleLogout = () => {
       dispatch(logout());
-      props.history.push("/signin");
+      
+      history.push('/');
+      //props.history.push("/");
   }
-
-  console.log(props)
 
   const openMenu = () => {
     document.getElementById("sidebar").classList.add("open");
