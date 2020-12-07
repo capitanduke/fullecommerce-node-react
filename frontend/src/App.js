@@ -23,15 +23,13 @@ function App(props) {
 
   const userSignin = useSelector(state => state.userSignin);
   const {userInfo} = userSignin;
-
-
+  
   const dispatch = useDispatch();
 
   const handleLogout = () => {
       dispatch(logout());
       
       history.push('/');
-      //props.history.push("/");
   }
 
   const openMenu = () => {
@@ -53,6 +51,42 @@ function App(props) {
   document.getElementById("test").classList.remove("test2");
   document.getElementById("test").classList.add("test");
 }
+
+const onHoverAdmin = () => {
+  document.getElementById("testAdmin").classList.remove("testAdmin");
+  document.getElementById("testAdmin").classList.add("testAdmin2");
+}
+
+const onLeaveAdmin = () => {
+document.getElementById("testAdmin").classList.remove("testAdmin2");
+document.getElementById("testAdmin").classList.add("testAdmin");
+}
+
+let testing;
+  
+  if( userInfo ){
+    if( userInfo.isAdmin ){
+      testing = 
+      <div className="menu-top-admin" id="menu-top-admin" onMouseOver={onHoverAdmin} onMouseLeave={onLeaveAdmin}>
+        <div>
+          ADMIN
+        </div>
+        <div className="testAdmin" id="testAdmin">
+          <div>
+            <Link to="/Orders">
+              Orders
+            </Link>
+          </div>
+          <div>
+            <Link to="/products">
+              Products
+            </Link>
+          </div>
+        </div>
+      </div>;
+    } 
+  } 
+
 
 
 
@@ -104,7 +138,14 @@ function App(props) {
                   </Link>
                 </div>
               }
+              {
+                testing
+              }
             </div>
+            
+              
+
+            
               
           </div>
       </header>

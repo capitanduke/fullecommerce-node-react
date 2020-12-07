@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveProduct, listProducts, deleteProduct } from '../actions/productAction';
+import Axios from 'axios';
 
 function ProductsScreen(props) {
 
@@ -74,7 +75,31 @@ function ProductsScreen(props) {
     e.preventDefault();
     dispatch(saveProduct({_id: id, name, image, brand, price, category, countInStock, description, rating, reviews}));
   }
-  
+
+  const [loadingUpload, setLoadingUpload] = useState(false);
+  const [errorUpload, setErrorUpload] = useState('');
+  const userSignin = useSelector(state => state.userSignin);
+  const { userInfo } = userSignin;
+
+  const uploadFileHandler = async(e) => {
+    const file = e.target.files[0];
+    const bodyFormData = new FormData();
+    bodyFormData.append('image', file);
+    setLoadingUpload(true);
+    try{
+      const {data} = await Axios.post('/api/uploads', bodyFormData, {
+        headers: { 'Content-Type' : 'multipart/form-data',
+        Authorization : `Bearer ${userInfo.token}`,
+        },
+      });
+      setImage(data);
+      setLoadingUpload(false);
+    } catch (error){
+      setErrorUpload(error.message);
+      setLoadingUpload(false);
+    }
+
+  }
 
 
   return <div className="content content-margined">
@@ -109,6 +134,16 @@ function ProductsScreen(props) {
             </label>
             <input type="text" name="image" id="image" value={image} onChange={(e) => setImage(e.target.value)}>
             </input>
+          </li>
+          <li>
+            <label htmlFor="imageFile">
+              Image File
+            </label>
+            <input type="file" name="imageFile" id="imageFile" label="Choose image" 
+              onChange={uploadFileHandler}>
+            </input>
+            { loadingUpload && "loading....." }
+            { errorUpload &&  "error" }
           </li>
           <li>
             <label htmlFor="brand">
