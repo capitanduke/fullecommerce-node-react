@@ -39,7 +39,7 @@ function ProductUploadScreen(props) {
     <form onSubmit={submitHandler} >
       <ul className="form-container">
         <li>
-          <h2>Create Account</h2>
+          <h2>Create Product</h2>
         </li>
         <li>
           {loading && <div>Loading...</div>}

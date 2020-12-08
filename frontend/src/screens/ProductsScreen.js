@@ -53,7 +53,10 @@ function ProductsScreen(props) {
   }, [successSave, productDelete]);
 
   const openModal = (product) => {
-      setModalVisible(true);
+    setModalVisible(true);
+    console.log("hello open");
+
+    if(product._id){
       setId(product._id);
       setName(product.name);
       setImage(product.image);
@@ -64,7 +67,24 @@ function ProductsScreen(props) {
       setDescription(product.description);
       setRating(product.rating);
       setReviews(product.reviews);
+
+    } else {
+      setId("");
+      setName("");
+      setImage("");
+      setBrand("");
+      setPrice("");
+      setCategory("");
+      setCountInStock("");
+      setDescription("");
+      setRating("");
+      setReviews("");
+    }
+      
+      
   }
+
+  
 
   const handleDeleteProduct = (product) => {
     dispatch(deleteProduct(product._id));
@@ -75,6 +95,8 @@ function ProductsScreen(props) {
     e.preventDefault();
     dispatch(saveProduct({_id: id, name, image, brand, price, category, countInStock, description, rating, reviews}));
   }
+
+  
 
   const [loadingUpload, setLoadingUpload] = useState(false);
   const [errorUpload, setErrorUpload] = useState('');
@@ -92,7 +114,9 @@ function ProductsScreen(props) {
         Authorization : `Bearer ${userInfo.token}`,
         },
       });
+      
       setImage(data);
+
       setLoadingUpload(false);
     } catch (error){
       setErrorUpload(error.message);
@@ -115,7 +139,7 @@ function ProductsScreen(props) {
       <form onSubmit={submitHandler} >
         <ul className="form-container">
           <li>
-            <h2>Create Account</h2>
+            <h2>{ id ? 'EDIT PRODUCT' : 'CREATE PRODUCT' }</h2>
           </li>
           <li>
             {loadingSave && <div>Loading...</div>}
@@ -156,7 +180,7 @@ function ProductsScreen(props) {
             <label htmlFor="price">
               Price
             </label>
-            <input type="text" name="price" id="price" value={price} onChange={(e) => setPrice(e.target.value)}>
+            <input type="number" name="price" id="price" value={price} onChange={(e) => setPrice(e.target.value)}>
             </input>
           </li>
           <li>
