@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { saveProduct, listProducts, deleteProduct } from '../actions/productAction';
 import Axios from 'axios';
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 function ProductsScreen(props) {
 
@@ -34,7 +39,6 @@ function ProductsScreen(props) {
 
   const productList = useSelector(state => state.productList);
   const { loading, products, success } = productList;
-
   
   useEffect(() => {
     
@@ -54,44 +58,27 @@ function ProductsScreen(props) {
 
   const openModal = (product) => {
     setModalVisible(true);
-    console.log("hello open");
 
     if(product._id){
-      setId(product._id);
-      setName(product.name);
-      setImage(product.image);
-      setBrand(product.brand);
-      setPrice(product.price);
-      setCategory(product.category);
-      setCountInStock(product.countInStock);
-      setDescription(product.description);
-      setRating(product.rating);
-      setReviews(product.reviews);
-
-    } else {
-      setId("");
-      setName("");
-      setImage("");
-      setBrand("");
-      setPrice("");
-      setCategory("");
-      setCountInStock("");
-      setDescription("");
-      setRating("");
-      setReviews("");
-    }
+      setId(product._id | "");
+      setName(product.name | ""); 
+      setImage(product.image | "");
+      setBrand(product.brand | "");
+      setPrice(product.price | "");
+      setCategory(product.category | "");
+      setCountInStock(product.countInStock | "");
+      setDescription(product.description | "");
+      setRating(product.rating | "");
+      setReviews(product.reviews | "");
+    } 
       
       
   }
+
 
   
 
-  const handleDeleteProduct = (product) => {
-    dispatch(deleteProduct(product._id));
-  }
-
   const submitHandler = (e) => {
-    console.log(countInStock);
     e.preventDefault();
     dispatch(saveProduct({_id: id, name, image, brand, price, category, countInStock, description, rating, reviews}));
   }
@@ -125,6 +112,33 @@ function ProductsScreen(props) {
 
   }
 
+  const handleDeleteProduct = (product) => {
+    dispatch(deleteProduct(product._id));
+  }
+
+
+  /* DIALOG MODAL CONFIRM DELETE*/
+  const [status, setStatus] = useState(false);
+
+  const handleClickOpen = () => {
+    setStatus(true);
+  };
+
+  const handleClose = () => {
+    setStatus(false);
+  };
+
+  const handleAgree = (product) => {
+    console.log("I agree!");
+    dispatch(deleteProduct(product._id));
+    setStatus(false);
+  };
+  const handleDisagree = () => {
+    setStatus(false);
+    console.log("I do not agree.");
+    
+  };
+
 
   return <div className="content content-margined">
     {messageCreate && <div className="container-message">
@@ -153,11 +167,11 @@ function ProductsScreen(props) {
             </input>
           </li>
           <li>
-            <label htmlFor="image">
+            {/*<label htmlFor="image">
               Image
             </label>
             <input type="text" name="image" id="image" value={image} onChange={(e) => setImage(e.target.value)}>
-            </input>
+            </input>*/}
           </li>
           <li>
             <label htmlFor="imageFile">
@@ -247,6 +261,7 @@ function ProductsScreen(props) {
         </thead>
         <tbody>
           {products.map(product => 
+            
             <tr key={product._id}>
               <td>{product._id}</td>
               <td>{product.name}</td>
@@ -256,14 +271,42 @@ function ProductsScreen(props) {
               <td>
                 <button className="button" onClick={()=>openModal(product)}>Edit</button>
                 {' '}
-                <button className="button" onClick={() => handleDeleteProduct(product)}>Delete</button>
+                <button className="button" onClick={() => handleClickOpen(product)}>Delete</button>
               </td>
+
+              <Dialog
+                open={status}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  {"Successful Alert"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    You are successful in life!
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={() => handleDisagree()} color="primary">
+                    Disagree
+                  </Button>
+                  <Button onClick={() => handleAgree(product)} color="primary" autoFocus>
+                    Agree
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </tr>
+            
           )}
             
         </tbody>
       </table>
     </div>
+
+
+    
     
   </div>
   
