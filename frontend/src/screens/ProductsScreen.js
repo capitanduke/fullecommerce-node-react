@@ -9,8 +9,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-function ProductsScreen(props) {
 
+function ProductsScreen(props) {
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -27,13 +27,15 @@ function ProductsScreen(props) {
 
   const [messageCreate, setMessageCreate] = useState(false);
   
-
   const productSave = useSelector(state => state.productSave);
   const { loading: loadingSave, success: successSave, message: messageSave, error: errorSave } = productSave;
 
   const productDelete = useSelector(state => state.productDelete);
-  const { loading: loadingDelete, success: successDelete, error: errorDelete } = productDelete;
-  
+  const { loading: loadingDelete, success: successDelete, error: errorDelete, message: messageDelete } = productDelete;
+
+  console.log(productDelete);
+  console.log(messageDelete);
+  //console.log(productSave);
   
   const dispatch = useDispatch(); 
 
@@ -42,7 +44,7 @@ function ProductsScreen(props) {
   
   useEffect(() => {
     
-    if(successSave){
+    if(successSave || successDelete){
       setModalVisible(false);
       setMessageCreate(true)
       setTimeout(
@@ -59,31 +61,38 @@ function ProductsScreen(props) {
   const openModal = (product) => {
     setModalVisible(true);
 
+
     if(product._id){
-      setId(product._id | "");
-      setName(product.name | ""); 
-      setImage(product.image | "");
-      setBrand(product.brand | "");
-      setPrice(product.price | "");
-      setCategory(product.category | "");
-      setCountInStock(product.countInStock | "");
-      setDescription(product.description | "");
-      setRating(product.rating | "");
-      setReviews(product.reviews | "");
-    } 
+      setId(product._id);
+      setName(product.name); 
+      setImage(product.image);
+      setBrand(product.brand);
+      setPrice(product.price);
+      setCategory(product.category);
+      setCountInStock(product.countInStock);
+      setDescription(product.description);
+      setRating(product.rating);
+      setReviews(product.reviews);
+    } else {
+      setId("");
+      setName(""); 
+      setImage("");
+      setBrand("");
+      setPrice("");
+      setCategory("");
+      setCountInStock("");
+      setDescription("");
+      setRating("");
+      setReviews("");
+    }
       
       
   }
-
-
-  
 
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(saveProduct({_id: id, name, image, brand, price, category, countInStock, description, rating, reviews}));
   }
-
-  
 
   const [loadingUpload, setLoadingUpload] = useState(false);
   const [errorUpload, setErrorUpload] = useState('');
@@ -95,6 +104,7 @@ function ProductsScreen(props) {
     const bodyFormData = new FormData();
     bodyFormData.append('image', file);
     setLoadingUpload(true);
+
     try{
       const {data} = await Axios.post('/api/uploads', bodyFormData, {
         headers: { 'Content-Type' : 'multipart/form-data',
@@ -112,10 +122,6 @@ function ProductsScreen(props) {
 
   }
 
-  const handleDeleteProduct = (product) => {
-    dispatch(deleteProduct(product._id));
-  }
-
 
   /* DIALOG MODAL CONFIRM DELETE*/
   const [status, setStatus] = useState(false);
@@ -129,20 +135,19 @@ function ProductsScreen(props) {
   };
 
   const handleAgree = (product) => {
-    console.log("I agree!");
     dispatch(deleteProduct(product._id));
     setStatus(false);
   };
   const handleDisagree = () => {
     setStatus(false);
-    console.log("I do not agree.");
-    
   };
 
 
   return <div className="content content-margined">
-    {messageCreate && <div className="container-message">
+    {messageCreate && successSave && <div className="container-message">
       <h1>{messageSave}</h1>
+    </div> || successDelete && <div className="container-message">
+      <h1>{messageDelete}</h1>
     </div>}
     <div className="product-header">
       <h3>Products</h3>
@@ -181,7 +186,7 @@ function ProductsScreen(props) {
               onChange={uploadFileHandler}>
             </input>
             { loadingUpload && "loading....." }
-            { errorUpload &&  "error" }
+            { errorUpload && <div>{errorUpload}</div> }
           </li>
           <li>
             <label htmlFor="brand">
@@ -269,9 +274,9 @@ function ProductsScreen(props) {
               <td>{product.category}</td>
               <td>{product.brand}</td>
               <td>
-                <button className="button" onClick={()=>openModal(product)}>Edit</button>
+                <Button variant="contained" classes={{ root: 'my-class-name' }} onClick={()=>openModal(product)}>Edit</Button>
                 {' '}
-                <button className="button" onClick={() => handleClickOpen(product)}>Delete</button>
+                <Button variant="contained" color="secondary" onClick={() => handleClickOpen(product)}>Delete</Button>
               </td>
 
               <Dialog
@@ -281,11 +286,11 @@ function ProductsScreen(props) {
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  {"Successful Alert"}
+                  {"Delete Product"}
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    You are successful in life!
+                    Do you want to delete this product?
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>

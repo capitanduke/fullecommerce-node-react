@@ -495,7 +495,14 @@ tbody>tr:nth-child(odd){
   margin: 1em;
 }
 
+.menu-profile-name{
+  text-transform: uppercase;
+}
 
+.menu-admin-name{
+  text-transform: uppercase;
+  cursor: pointer;
+}
 
 .profile-drop-menu{
   display: none;
@@ -569,6 +576,15 @@ tbody>tr:nth-child(odd){
   opacity: 0;
 }
 
+/* MATERIAL UI */
+.my-class-name {
+  color: #000 !important;
+  background-color: #febd69 !important;
+}
+
+.MuiButton-containedSecondary{
+  color: #000 !important;
+}
 
 
 

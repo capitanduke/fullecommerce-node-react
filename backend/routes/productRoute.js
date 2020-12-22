@@ -82,10 +82,10 @@ const router = express.Router();
  
   router.delete('/delete/:id', isAuth, isAdmin, async (req, res) => {
 
-    const deletedProduct = await Product.findById(req.params.id);
-    if (deletedProduct) {
-      await deletedProduct.remove();
-      res.send({ message: 'Product Deleted' });
+    const product = await Product.findById(req.params.id);
+    if (product) {
+      const deletedProduct = await product.remove();
+      res.status(201).send({ message: 'Product Deleted', data: deletedProduct });
     } else {
       res.send('Error in Deletion.');
     }
