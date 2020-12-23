@@ -33,10 +33,6 @@ function ProductsScreen(props) {
   const productDelete = useSelector(state => state.productDelete);
   const { loading: loadingDelete, success: successDelete, error: errorDelete, message: messageDelete } = productDelete;
 
-  console.log(productDelete);
-  console.log(messageDelete);
-  //console.log(productSave);
-  
   const dispatch = useDispatch(); 
 
   const productList = useSelector(state => state.productList);

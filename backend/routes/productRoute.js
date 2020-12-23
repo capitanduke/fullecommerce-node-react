@@ -87,7 +87,7 @@ const router = express.Router();
       const deletedProduct = await product.remove();
       res.status(201).send({ message: 'Product Deleted', data: deletedProduct });
     } else {
-      res.send('Error in Deletion.');
+      res.status(501).send('Error in Deletion.');
     }
 
   })

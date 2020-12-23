@@ -2,7 +2,7 @@ import { ORDER_CREATE_REQUEST, ORDER_CREATE_SUCCESS, ORDER_CREATE_FAIL,
   ORDER_DETAILS_REQUEST, ORDER_DETAILS_SUCCESS, ORDER_DETAILS_FAIL,
   MY_ORDER_LIST_REQUEST, MY_ORDER_LIST_SUCCESS, MY_ORDER_LIST_FAIL,
   ORDER_LIST_REQUEST, ORDER_LIST_SUCCESS, ORDER_LIST_FAIL,
-  ORDER_DELETE_REQUEST, ORDER_DELETE_SUCCESS, ORDER_DELETE_FAIL } from '../constants/orderConstants';
+  ORDER_DELETE_REQUEST, ORDER_DELETE_SUCCESS, ORDER_DELETE_FAIL, ORDER_EMPTY } from '../constants/orderConstants';
 import Axios from "axios";
 
   const createOrder = (order) => async (dispatch, getState) => {
@@ -18,6 +18,10 @@ import Axios from "axios";
     } catch (error) {
       dispatch({ type: ORDER_CREATE_FAIL, payload: error.message });
     }
+  }
+
+  const orderEmpty = () => (dispatch) => {
+    dispatch({ type : ORDER_EMPTY})
   }
 
   const detailsOrder = (orderId) => async (dispatch, getState) => {
@@ -67,7 +71,7 @@ import Axios from "axios";
     try {
       dispatch({ type: ORDER_DELETE_REQUEST, payload: orderId });
       const { userSignin: { userInfo } } = getState();
-      const { data } = await Axios.get("/api/orders/delete/" + orderId, {
+      const { data } = await Axios.delete("/api/orders/delete/" + orderId, {
         headers: {
           Authorization: ' Bearer ' + userInfo.token
         }
@@ -78,4 +82,4 @@ import Axios from "axios";
     }
   }
 
-export {createOrder, detailsOrder, listMyOrders, listOrders, deleteOrder};
+export {createOrder, detailsOrder, listMyOrders, listOrders, deleteOrder, orderEmpty};

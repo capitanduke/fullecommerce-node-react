@@ -14,9 +14,6 @@ function PaymentScreen(props) {
   const { loading, userInfo, error } = userRegister;*/
   const dispatch = useDispatch();
 
-
-  
-
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(savePayment({paymentMethod}));

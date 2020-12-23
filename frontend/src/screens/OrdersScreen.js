@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { saveorder, listOrders, deleteOrder } from '../actions/orderAction';
+import { listOrders, deleteOrder } from '../actions/orderAction';
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -18,9 +18,7 @@ function OrdersScreen(props) {
 
   const orderList = useSelector(state => state.orderList);
   const { loading, orders, success } = orderList;
-
-
-  
+ 
   useEffect(() => {
     dispatch(listOrders());
 
@@ -31,8 +29,28 @@ function OrdersScreen(props) {
 
 
   const handleDeleteorder = (order) => {
-    dispatch(deleteOrder(order._id));
+    dispatch(deleteOrder(order));
   }
+
+
+  /* DIALOG MODAL CONFIRM DELETE*/
+  const [status, setStatus] = useState(false);
+
+  const handleClickOpen = () => {
+    setStatus(true);
+  };
+
+  const handleClose = () => {
+    setStatus(false);
+  };
+
+  const handleAgree = (order) => {
+    dispatch(deleteOrder(order));
+    setStatus(false);
+  };
+  const handleDisagree = () => {
+    setStatus(false);
+  };
 
   return <div className="content content-margined">
     <div className="container-message">
@@ -69,10 +87,35 @@ function OrdersScreen(props) {
               <td>{order.isDelivered}</td>
               <td>{order.DeliveredAt}</td>
               <td>
-                <Link to={"/order/" + order._id} className="button secondary">Details </Link>
+                <Button variant="contained" classes={{ root: 'my-class-name' }}>
+                  <Link to={"/order/" + order._id} classes={{ label: 'my-class-details-button' }}>Details </Link>
+                </Button>
                 {' '}
-                <button type="button" className="button secondary" onClick={() => handleDeleteorder(order)}>Delete</button>
+                <Button variant="contained" color="secondary" onClick={() => handleClickOpen()}>Delete</Button>
               </td>
+              <Dialog
+                open={status}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                >
+                <DialogTitle id="alert-dialog-title">
+                  {"Delete Order"}
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Do you want to delete this order?
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={() => handleDisagree()} color="primary">
+                    Disagree
+                  </Button>
+                  <Button onClick={() => handleAgree(order._id)} color="primary" autoFocus>
+                    Agree
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </tr>
           )}
             

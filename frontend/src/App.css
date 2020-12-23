@@ -586,6 +586,10 @@ tbody>tr:nth-child(odd){
   color: #000 !important;
 }
 
+a:-webkit-any-link{
+  text-decoration: none;
+}
+
 
 
 

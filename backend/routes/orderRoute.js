@@ -1,6 +1,6 @@
 import express from 'express';
 import Order from '../models/orderModel';
-import { isAuth } from '../util';
+import { isAuth, isAdmin } from '../util';
 
 const router = express.Router();
 
@@ -39,14 +39,14 @@ router.post("/", isAuth, async(req, res) => {
     res.status(201).send({message: "New Order Created", data: newOrderCreated });   
 });
 
-router.get("/delete/:id", isAuth, async (req, res) => {
+router.delete("/delete/:id", isAuth, isAdmin, async (req, res) => {
     const orderId = req.params.id;
-    const order = await Order.find({_id: orderId});
+    const order = await Order.findById({_id: orderId});
     if(order){
-        await Order.remove();
-        res.send({ message: 'Order Deleted' });
+        await order.remove();
+        res.status(201).send({ message: 'Order Deleted' });
     } else {
-        res.send({ message: 'Error deleting order' });
+        res.status(501).send({ message: 'Error deleting order' });
     }
 });
 

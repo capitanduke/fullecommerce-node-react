@@ -14,16 +14,11 @@ function CartScreen (props) {
     const cartProducts = useSelector(state => state.cart);
     const { cartItems, loading, error } = cartProducts;
 
-
-
     const dispatch = useDispatch();
-
 
     const removeFromCartHandler = (productId) => {
         dispatch(removeFromCart(productId));
     }
-
-    
 
     useEffect(() => {
         if(productId){

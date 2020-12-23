@@ -14,7 +14,7 @@ const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const initialState = {
     cart: { cartItems, shipping: {}, payment: {} },
     userSignin: { userInfo },
-    userUpdate: { userInfo }
+    userUpdate: { userInfo },
   };
 
 

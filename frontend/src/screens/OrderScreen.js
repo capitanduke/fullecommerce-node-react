@@ -2,21 +2,36 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { detailsOrder } from '../actions/orderAction';
+import { removeFromCart } from '../actions/cartAction';
+import { orderEmpty } from '../actions/orderAction';
+
 
 function OrderScreen (props) {
 
+    const dispatch = useDispatch();
 
     const orderDetails = useSelector(state => state.orderDetails);
     const { loading, order, error } = orderDetails;
 
-    const dispatch = useDispatch();
+    const cart = useSelector(state => state.cart);
+    const { cartItems } = cart;
 
     useEffect(() => {
         dispatch(detailsOrder(props.match.params.id));
+
+        cartItems.forEach(element => dispatch(removeFromCart(element.product)));
+
+        dispatch(orderEmpty());
+
+
         return () => {
             
         }
     }, [])
+
+    const test = useSelector(state => state);
+    console.log(test);
+
 
     const payHandler = () => {}
     
@@ -28,7 +43,7 @@ return  loading ? <div>Loading.....</div> : error ? <div>{error}</div> : <div>
                             <div className="placeorder-info"> 
                                 <div>
                                     <h3>
-                                        Shipping
+                                        Shipping2
                                     </h3>
                                     <div>
                                         {order.shipping.address}, {order.shipping.city}
