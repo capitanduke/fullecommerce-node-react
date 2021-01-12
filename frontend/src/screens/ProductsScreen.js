@@ -8,9 +8,13 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import NoAccess from '../components/NoAccess';
 
 
 function ProductsScreen(props) {
+
+  const userSignin = useSelector(state => state.userSignin);
+  const { userInfo } = userSignin;
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -37,7 +41,9 @@ function ProductsScreen(props) {
 
   const productList = useSelector(state => state.productList);
   const { loading, products, success } = productList;
-  
+
+  const [flag, setFlag] = useState(false);
+
   useEffect(() => {
     
     if(successSave || successDelete){
@@ -48,7 +54,16 @@ function ProductsScreen(props) {
         5000
       );
     }
-    dispatch(listProducts());
+
+    if(userInfo){
+      if(userInfo.isAdmin){
+        dispatch(listProducts());
+      }
+    } else {
+      setFlag(true);
+    }
+
+
     return () => {
       //
     };
@@ -92,8 +107,7 @@ function ProductsScreen(props) {
 
   const [loadingUpload, setLoadingUpload] = useState(false);
   const [errorUpload, setErrorUpload] = useState('');
-  const userSignin = useSelector(state => state.userSignin);
-  const { userInfo } = userSignin;
+  
 
   const uploadFileHandler = async(e) => {
     const file = e.target.files[0];
@@ -139,7 +153,7 @@ function ProductsScreen(props) {
   };
 
 
-  return <div className="content content-margined">
+  return flag ? <NoAccess /> : <div className="content content-margined">
     {messageCreate && successSave && <div className="container-message">
       <h1>{messageSave}</h1>
     </div> || successDelete && <div className="container-message">

@@ -8,29 +8,38 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import NoAccess from '../components/NoAccess';
+
 
 function OrdersScreen(props) {
 
   const dispatch = useDispatch(); 
+
+  const userSigned = useSelector(state => state.userSignin);
+  const { userInfo } = userSigned;
 
   const orderDelete = useSelector(state => state.orderDelete);
   const { loading: loadingDelete, success: successDelete, error: errorDelete } = orderDelete;
 
   const orderList = useSelector(state => state.orderList);
   const { loading, orders, success } = orderList;
+
+  const [flag, setFlag] = useState(false);
  
   useEffect(() => {
-    dispatch(listOrders());
+
+    if( userInfo ){
+      if(userInfo.isAdmin){
+        dispatch(listOrders());
+      }
+    } else {
+      setFlag(true);
+    }
 
     return () => {
       //
     };
   }, [orderDelete]);
-
-
-  const handleDeleteorder = (order) => {
-    dispatch(deleteOrder(order));
-  }
 
 
   /* DIALOG MODAL CONFIRM DELETE*/
@@ -53,6 +62,8 @@ function OrdersScreen(props) {
   };
 
   return <div className="content content-margined">
+    { flag ? <NoAccess /> : <>
+    
     <div className="container-message">
       <h1>{/*successDelete*/}</h1>
     </div>
@@ -122,6 +133,9 @@ function OrdersScreen(props) {
         </tbody>
       </table>
     </div>
+    </>
+    }
+    
     
   </div>
   

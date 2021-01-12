@@ -1,14 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { detailsOrder } from '../actions/orderAction';
 import { removeFromCart } from '../actions/cartAction';
 import { orderEmpty } from '../actions/orderAction';
+import NoAccess from '../components/NoAccess';
 
 
 function OrderScreen (props) {
 
     const dispatch = useDispatch();
+
+    const userSigned = useSelector(state => state.userSignin);
+    const { userInfo } = userSigned;
 
     const orderDetails = useSelector(state => state.orderDetails);
     const { loading, order, error } = orderDetails;
@@ -16,12 +20,25 @@ function OrderScreen (props) {
     const cart = useSelector(state => state.cart);
     const { cartItems } = cart;
 
+    const [flag, setFlag] = useState(false);
+
     useEffect(() => {
-        dispatch(detailsOrder(props.match.params.id));
 
-        cartItems.forEach(element => dispatch(removeFromCart(element.product)));
+        if( userInfo ){
+            if(userInfo.isAdmin){
 
-        dispatch(orderEmpty());
+                dispatch(detailsOrder(props.match.params.id));
+
+                cartItems.forEach(element => dispatch(removeFromCart(element.product)));
+
+                dispatch(orderEmpty());
+
+            }
+          } else {
+            setFlag(true);
+          }
+
+        
 
 
         return () => {
@@ -29,13 +46,10 @@ function OrderScreen (props) {
         }
     }, [])
 
-    const test = useSelector(state => state);
-    console.log(test);
-
 
     const payHandler = () => {}
     
-return  loading ? <div>Loading.....</div> : error ? <div>{error}</div> : <div>
+    return  flag ? <NoAccess /> : loading ? <div>Loading.....</div> : error ? <div>{error}</div> : <div>
 
 
             {

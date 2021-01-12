@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { listMyOrders } from '../actions/orderAction';
+import NoAccess from '../components/NoAccess';
 
 
 
@@ -10,23 +11,31 @@ function HistoryOrdersScreen(props){
     const myOrderList = useSelector(state => state.myOrderList);
     const { loading: loadingOrders, error: errorOrders, orders } = useSelector(state => state.myOrderList);
 
-
     const userSigned = useSelector(state => state.userSignin);
     const { userInfo } = userSigned;
 
+    const [flag, setFlag] = useState(false);
+
     const dispatch = useDispatch();
-    
+
     useEffect(() => {
 
-        dispatch(listMyOrders(userInfo._id));
+        if( !userInfo ){
+            setFlag(true);
+        } else {
+            dispatch(listMyOrders(userInfo._id));
+        }
+
         return () => {
             
         }
     }, [])
+    
+    
 
     return <div className="profile-orders content-margined">
-    {
-        
+    { 
+        flag ? <NoAccess /> :
         loadingOrders ? <div>Loading...</div> :
         errorOrders ? <div>{errorOrders} </div> :
             <table className="table">

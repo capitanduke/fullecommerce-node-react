@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, update } from '../actions/userAction';
 import { listMyOrders } from '../actions/orderAction';
+import NoAccess from '../components/NoAccess';
 
 function ProfileScreen(props){
 
@@ -16,6 +17,8 @@ function ProfileScreen(props){
 
     const userUpdate = useSelector(state => state.userUpdate);
     const { loading, error, success} = userUpdate;
+
+    const [flag, setFlag] = useState(false);
 
 
     const handleLogout = () => {
@@ -44,20 +47,26 @@ function ProfileScreen(props){
     useEffect(() => {
        
         if(userInfo){
-            setEmail(userInfo.email);
-            setName(userInfo.name);
-            setPassword(userInfo.password);
+            if(userInfo._id){
+                setEmail(userInfo.email);
+                setName(userInfo.name);
+                setPassword(userInfo.password);
+            }
+        } else {
+            setFlag(true);
         }
+
         
         return () => {
           //
         };
       }, []);
 
-    
+      console.log(flag);
 
 
-    return <div className="profile">
+    return flag ? <NoAccess /> : <>
+    { <div className="profile">
         <div className="profile-info">
             <div className="form">
                 <form onSubmit={submitHandler} >
@@ -100,7 +109,7 @@ function ProfileScreen(props){
             </div>
         </div>
         
-    </div>
+    </div>} </>
 }
 
 export default ProfileScreen;
