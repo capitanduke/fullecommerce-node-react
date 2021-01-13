@@ -22,7 +22,7 @@ router.post('/signin', async (req, res) => {
     } else {
         res.status(401).send({msg:'Invalid Email or Password.'})
     }
-})
+});
 
 
 router.put('/:id', isAuth, async (req, res) => {
@@ -69,7 +69,7 @@ router.post('/register', async (req, res) => {
       res.status(401).send({ message: 'Invalid User Data.' });
     }
 
-  });
+});
 
 
 router.get("/createadmin", async (req, res) => {
@@ -89,6 +89,13 @@ router.get("/createadmin", async (req, res) => {
         res.send({ msg: error.message})
     }
 
+
+});
+
+router.get("/", async(req, res) => {
+
+    const users = await User.find({});
+    res.send(users);
 
 });
 

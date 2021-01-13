@@ -35,7 +35,6 @@ function ProfileScreen(props){
         let element = document.getElementById('update-profile-success');
         element.classList.add('up-active');
         
-
         setTimeout(() => {
             element.classList.remove('up-active');
         }, 5000);
@@ -43,14 +42,19 @@ function ProfileScreen(props){
     }
 
 
+    const userId = props.match.params.id;
 
     useEffect(() => {
-       
-        if(userInfo){
+
+        if(userId  && userId !== undefined){
+            console.log(userId);
+            console.log("con id params");
+        } else if(userInfo && userId === undefined){
             if(userInfo._id){
                 setEmail(userInfo.email);
                 setName(userInfo.name);
                 setPassword(userInfo.password);
+                console.log("sin id params");
             }
         } else {
             setFlag(true);
@@ -61,8 +65,6 @@ function ProfileScreen(props){
           //
         };
       }, []);
-
-      console.log(flag);
 
 
     return flag ? <NoAccess /> : <>

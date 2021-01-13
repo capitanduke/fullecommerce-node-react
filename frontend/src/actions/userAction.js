@@ -1,8 +1,26 @@
 import { USER_SIGTNIN_REQUEST, USER_SIGTNIN_SUCCESS, USER_SIGTNIN_FAIL, 
   USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL, 
-  USER_LOGOUT, USER_UPDATE_REQUEST, USER_UPDATE_SUCCESS, USER_UPDATE_FAIL } from '../constants/userConstants';
+  USER_LOGOUT, USER_UPDATE_REQUEST, USER_UPDATE_SUCCESS, USER_UPDATE_FAIL,
+  USER_LIST_REQUEST, USER_LIST_SUCCESS, USER_LIST_FAIL } from '../constants/userConstants';
 import Cookie from "js-cookie";
 import Axios from 'axios';
+
+const users = () => async (dispatch, getState) => {
+  const { userSignin: { userInfo } } = getState();
+  dispatch({type: USER_LIST_REQUEST});
+  try{
+    const { data } = await Axios.get("/api/users/" ,
+     {
+      headers: {
+        Authorization: 'Bearer ' + userInfo.token
+      }
+    });
+    dispatch({ type: USER_LIST_SUCCESS, payload: data });
+  } catch(error){
+    dispatch({type: USER_LIST_FAIL, payload: error.message});
+  }
+  
+}
 
 
 const signIn = (email, password) => async (dispatch) => {
@@ -49,4 +67,4 @@ const register = (name, email, password) => async (dispatch) => {
     dispatch({ type : USER_LOGOUT})
   }
 
-export { signIn, register, logout, update };
+export { signIn, register, logout, update, users };

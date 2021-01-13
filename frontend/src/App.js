@@ -16,9 +16,8 @@ import OrderScreen from './screens/OrderScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import OrdersScreen from './screens/OrdersScreen';
 import HistoryOrdersScreen from './screens/HistoryOrdersScreen';
+import UsersScreen from './screens/UsersScreen';
 import history from './history';
-
-
 
 
 function App(props) {
@@ -29,9 +28,8 @@ function App(props) {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-      dispatch(logout());
-      
-      history.push('/');
+    dispatch(logout());
+    history.push('/');
   }
 
   const openMenu = () => {
@@ -90,8 +88,6 @@ let testing;
   } 
 
 
-
-
   return (
       <BrowserRouter>
         <div className="grid-container">
@@ -144,11 +140,6 @@ let testing;
                     testing
                   }
                 </div>
-                
-                  
-
-                
-                  
               </div>
           </header>
           <aside id="sidebar" className="sidebar">
@@ -167,7 +158,8 @@ let testing;
           </aside>
           <main className="main">
               <div className="content">
-                <Route path="/profile" component={ProfileScreen} />
+                <Route path="/profile" exact={true} component={ProfileScreen} />
+                <Route path="/profileid/:id?" exact={true} component={ProfileScreen} />
                 <Route path="/HistoryOrdersScreen" component={HistoryOrdersScreen} />
                 <Route path="/Orders" component={OrdersScreen} />
                 <Route path="/products" component={ProductsScreen} />
@@ -179,8 +171,8 @@ let testing;
                 <Route path="/register" component={RegisterScreen} />
                 <Route path="/details/:id" component={ProductScreen} />
                 <Route path="/cart/:id?" component={CartScreen} />
+                <Route path="/users" component={UsersScreen} />
                 <Route path="/" exact={true} component={HomeScreen} />
-                
               </div>
           </main>
           <footer className="footer">
