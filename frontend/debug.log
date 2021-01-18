@@ -4,3 +4,5 @@
 [0112/225451.439:ERROR:file_io.cc(90)] ReadExactly: expected 36, observed 0
 [0112/230043.097:ERROR:file_io.cc(90)] ReadExactly: expected 36, observed 0
 [0112/235012.393:ERROR:file_io.cc(90)] ReadExactly: expected 36, observed 0
+[0113/201249.543:ERROR:directory_reader_win.cc(43)] FindFirstFile: El sistema no puede encontrar la ruta especificada. (0x3)
+[0114/001158.568:ERROR:file_io.cc(90)] ReadExactly: expected 36, observed 0

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, update } from '../actions/userAction';
-import { listMyOrders } from '../actions/orderAction';
-import NoAccess from '../components/NoAccess';
 
 function ProfileScreen(props){
 
@@ -17,9 +15,6 @@ function ProfileScreen(props){
 
     const userUpdate = useSelector(state => state.userUpdate);
     const { loading, error, success} = userUpdate;
-
-    const [flag, setFlag] = useState(false);
-
 
     const handleLogout = () => {
         dispatch(logout());
@@ -41,24 +36,20 @@ function ProfileScreen(props){
 
     }
 
-
-    const userId = props.match.params.id;
-
     useEffect(() => {
 
-        if(userId  && userId !== undefined){
-            console.log(userId);
-            console.log("con id params");
-        } else if(userInfo && userId === undefined){
+
+        if(userInfo){
             if(userInfo._id){
                 setEmail(userInfo.email);
                 setName(userInfo.name);
                 setPassword(userInfo.password);
-                console.log("sin id params");
             }
         } else {
-            setFlag(true);
+            //setFlag(true);
+            props.history.push("/signin");
         }
+
 
         
         return () => {
@@ -67,8 +58,7 @@ function ProfileScreen(props){
       }, []);
 
 
-    return flag ? <NoAccess /> : <>
-    { <div className="profile">
+    return <div className="profile">
         <div className="profile-info">
             <div className="form">
                 <form onSubmit={submitHandler} >
@@ -110,8 +100,7 @@ function ProfileScreen(props){
                 </form>
             </div>
         </div>
-        
-    </div>} </>
+    </div>
 }
 
 export default ProfileScreen;

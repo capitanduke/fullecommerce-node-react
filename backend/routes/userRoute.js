@@ -26,6 +26,7 @@ router.post('/signin', async (req, res) => {
 
 
 router.put('/:id', isAuth, async (req, res) => {
+  
   const userId = req.params.id;
   const user = await User.findById(userId);
   if (user) {
@@ -41,7 +42,7 @@ router.put('/:id', isAuth, async (req, res) => {
       token: getToken(updatedUser),
     });
   } else {
-    res.status(404).send({ message: 'User Not Found' });
+    res.status(404).send({ msg: error.message });
   }
 });
 
@@ -92,10 +93,27 @@ router.get("/createadmin", async (req, res) => {
 
 });
 
+router.get("/profileid/:id", async(req, res) => {
+
+  try{
+    const userId = req.params.id;
+    const user = await User.findById({_id: userId});
+    res.send(user);
+
+  } catch(error){
+    res.status(401).send({ message: 'Invalid User Data.' });
+  }
+
+});
+
 router.get("/", async(req, res) => {
 
-    const users = await User.find({});
-    res.send(users);
+    try{
+      const users = await User.find({});
+      res.send(users);
+    } catch(error){
+      res.send({ msg: error.message})
+    }
 
 });
 
