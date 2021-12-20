@@ -1,5 +1,3 @@
-import express from 'express';
-import data from './data';
 import dotenv from 'dotenv';
 import config from './config';
 import mongoose from 'mongoose';
@@ -9,6 +7,8 @@ import productRoute from './routes/productRoute';
 import orderRoute from './routes/orderRoute';
 import uploadRouter from './routes/uploadRouter';
 import path from 'path';
+
+var express = require('express');
 
 dotenv.config();
 
