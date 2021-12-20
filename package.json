@@ -4,6 +4,7 @@
   "description": "Simulate Amazon Store",
   "main": "index.js",
   "scripts": {
+    "build": "cd frontend && npm install && npm build",
     "dev": "nodemon --watch backend --exec babel-node backend/server.js"
   },
   "author": "Raul Rincones",
@@ -23,5 +24,9 @@
     "@babel/node": "^7.10.1",
     "@babel/preset-env": "^7.10.2",
     "nodemon": "^2.0.4"
+  },
+  "engines": {
+    "node": "12.4.0",
+    "npm": "6.9.0"
   }
 }
