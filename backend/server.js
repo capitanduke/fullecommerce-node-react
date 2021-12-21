@@ -1,15 +1,21 @@
-import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
+//import dotenv from 'dotenv';
+//import config from './config';
+//import mongoose from 'mongoose';
+//import bodyParser from 'body-parser';
 import userRoute from './routes/userRoute';
 import productRoute from './routes/productRoute';
 import orderRoute from './routes/orderRoute';
 import uploadRouter from './routes/uploadRouter';
 import path from 'path';
 
-
 var express = require('express');
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser')
 
-const mongodbUrl = MONGODB_URL;
+//dotenv.config();
+
+//const mongodbUrl = config.MONGODB_URL;
+const mongodbUrl = MONGODV_URL;
 
 mongoose.connect(mongodbUrl, {
     useNewUrlParser:true,
