@@ -1,4 +1,4 @@
-//import dotenv from 'dotenv';
+import dotenv from 'dotenv';
 import config from './config';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
@@ -10,7 +10,7 @@ import path from 'path';
 
 var express = require('express');
 
-//dotenv.config();
+dotenv.config();
 
 const mongodbUrl = config.MONGODB_URL;
 
