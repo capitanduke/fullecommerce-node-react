@@ -1,4 +1,3 @@
-import config from './config';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import userRoute from './routes/userRoute';
@@ -10,7 +9,7 @@ import path from 'path';
 
 var express = require('express');
 
-const mongodbUrl = config.MONGODB_URL;
+const mongodbUrl = MONGODB_URL;
 
 mongoose.connect(mongodbUrl, {
     useNewUrlParser:true,
