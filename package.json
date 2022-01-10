@@ -5,8 +5,8 @@
   "description": "Simulate Amazon Store",
   "main": "index.js",
   "scripts": {
-    "build": "cd frontend && npm install && npm build",
-    "dev": "nodemon --watch backend --exec babel-node backend/server.js"
+    "build": "cd frontend && npm install && npm run build",
+    "start": "nodemon --watch backend --exec node --experimental-modules backend/server.js"
   },
   "author": "Raul Rincones",
   "license": "ISC",
