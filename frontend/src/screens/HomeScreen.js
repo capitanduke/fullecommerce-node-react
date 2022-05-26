@@ -28,6 +28,8 @@ function HomeScreen (props) {
     }
     
     useEffect(() => {
+
+        console.log(products);
         
         dispatch(listProducts());
         
